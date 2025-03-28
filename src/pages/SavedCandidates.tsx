@@ -1,29 +1,25 @@
 import { useEffect, useState } from 'react';
+import { Candidate } from '../types';
+import CandidateCard from './candidatecard';
 
 const SavedCandidates = () => {
-  const [saved, setSaved] = useState<any[]>([]);
+  const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
-    setSaved(data);
+    const stored = JSON.parse(localStorage.getItem('savedCandidates') || '[]');
+    setSavedCandidates(stored);
   }, []);
-
-  if (!saved.length) return <p>No candidates have been accepted yet.</p>;
 
   return (
     <div>
-      <h2>Saved Candidates</h2>
-      {saved.map((user, i) => (
-        <div key={i}>
-          <img src={user.avatar_url} alt="Avatar" width={100} />
-          <h3>{user.name}</h3>
-          <p>@{user.login}</p>
-          <p>{user.location}</p>
-          <p>{user.email}</p>
-          <p>{user.company}</p>
-          <a href={user.html_url} target="_blank">GitHub Profile</a>
-        </div>
-      ))}
+      <h1>Saved Candidates</h1>
+      {savedCandidates.length > 0 ? (
+        savedCandidates.map((candidate, index) => (
+          <CandidateCard key={index} candidate={candidate} />
+        ))
+      ) : (
+        <p>No saved candidates yet.</p>
+      )}
     </div>
   );
 };
